@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<title>LAMP一键安装包</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<meta name="keywords" content="LAMP,LAMP一键安装包,一键安装包"> 
+<meta name="description" content="您已成功安装LAMP一键安装包！"> 
+<style type="text/css"> 
+body {
+color:#333333;
+font-family:"Microsoft YaHei",tahoma,arial,helvetica,sans-serif;
+}
+.links {color: #009900}
+#main {
+    margin-right: auto;
+    margin-left: auto;
+    width: 650px;
+}
+</style> 
+</head> 
+<body> 
+<div id="main"> 
+  <p align="center"><font color=red>恭喜，LAMP一键安装包安装成功！</font></p>
+  <p align="center"><img src="./lamp.gif" alt="LAMP一键安装包"></p>
+  <p align="left">
+    <span><b>查看本地环境：</b></span>
+    <a href="/p.php" target="_blank" class="links">探针</a>
+    <a href="/phpinfo.php" target="_blank" class="links">phpinfo</a>
+    <a href="/phpmyadmin/" target="_blank" class="links">phpMyAdmin</a>
+  </p>
+  <p align="left"><span class="STYLE1"><b>LAMP使用方法：</b></span></p>
+  <p align="left"><li>lamp add|del|list：创建（删除，列出）虚拟主机。</li></p>
+  <p align="left"><li>lamp uninstall：一键卸载lamp（卸载之前注意备份好数据！）。</li></p>
+  <p align="left"><span class="STYLE1"><b>命令一览：</b></span></p>
+  <p align="left"><li>mysql命令:    /etc/init.d/mysqld(start|stop|restart|reload|status)</li></p>
+  <p align="left"><li>apache命令:    /etc/init.d/httpd(start|stop|restart|reload|status)</li></p>
+  <p align="left"><span class="STYLE1"><b>网站根目录：</b></span></p>
+  <p align="left"><li>默认web根目录： /data/www/html</li></p>
+  <p align="left"><span class="STYLE1"><b>关于本脚本的说明：</b></span></p>
+  <p align="left"><li>1、本脚本全部采用 yum 安装，升级方便；</li></p>
+  <p align="left"><li>2、Apache 为默认的2.2.15，MySQL 和 PHP 则是 <a href="http://www.atomicorp.com/channels/atomic/" target="_blank">Atomic repository</a> 的最新版。</li></p>
+  <p align="left"><li>3、如果你的 VPS 内存≥256M，建议编译安装 LAMP，详见：<a href="http://teddysun.com/lamp" target="_blank">这里</a></li></p>
+  <p align="center"><hr></p>
+  <p align="center">LAMP一键安装包 by <a href="http://teddysun.com/" target="_blank">Teddysun</a></p> 
+</div>
+</body>
+</html>

@@ -8,24 +8,25 @@
 * 服务器必须配置好软件源和可连接外网
 * 必须具有系统 Root 权限
 * 建议使用干净系统全新安装
-* 日期：2014年06月10日
+* 日期：2014年06月25日
 
 ## 关于本脚本
-* yum 安装所有的软件包，方便升级；
+* 一键 yum 安装所有的软件包，方便升级；
 * 支持 PHP 自带所有组件；
-* 支持 MySQL 数据库;
+* 支持 MySQL ，MariaDB 数据库;
 * 支持 XCache；
 * 支持 Zend Guard Loader；
 * 支持 ionCube PHP Loader；
+* 支持自助升级 phpMyAdmin；
 * 命令行新增虚拟主机，操作简便；
 * 一键卸载。
 
 ## 将会安装（yum 安装）
 * 1、Apache 2.2.15
-* 2、MySQL 5.5.37
+* 2、MySQL 5.5.38 或 MariaDB 5.5.37
 * 3、PHP 5.4.29
-* 4、phpMyAdmin 4.2.3
-* 5、xcache 3.1.0
+* 4、phpMyAdmin 4.2.4
+* 5、xcache
 * 6、Zend Guard Loader
 * 7、ionCube PHP Loader
 
@@ -49,17 +50,17 @@
 
 ##目录说明：
 
-* mysql data目录： /var/lib/mysql/
-* 默认的web根目录： /data/www/default
+* MySQL 或 MariaDB 数据库目录： /var/lib/mysql/
+* 默认的网站根目录： /data/www/default
 * 新建虚拟主机目录： /data/www/domain（此处 domain 为添加的域名）
 
 ##命令一览：
-* mysql命令: 
+* MySQL 或 MariaDB 命令: 
 
         /etc/init.d/mysqld(start|stop|restart|reload|status)
         service mysqld(start|stop|restart|reload|status)
 
-* apache命令: 
+* Apache 命令: 
 
         /etc/init.d/httpd(start|stop|restart|reload|status)
         service httpd(start|stop|restart|reload|status)      

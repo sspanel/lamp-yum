@@ -2,26 +2,26 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 #===============================================================================================
-#   System Required:  CentOS5.x (32bit/64bit) or CentOS6.x (32bit/64bit)
-#   Description:  Yum Install LAMP(Linux + Apache + MySQL + PHP ) for CentOS
+#   System Required:  CentOS / RedHat / Fedora
+#   Description:  Yum Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )
 #   Author: Teddysun <i@teddysun.com>
 #   Intro:  http://teddysun.com/lamp-yum
+#           https://github.com/teddysun/lamp-yum
 #===============================================================================================
 
 clear
 echo "#############################################################"
-echo "# Yum Install LAMP(Linux + Apache + MySQL + PHP )"
-echo "# CentOS5.x (32bit/64bit) or CentOS6.x (32bit/64bit)"
+echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora"
 echo "# Intro: http://teddysun.com/lamp-yum"
-echo "#"
+echo ""
 echo "# Author: Teddysun <i@teddysun.com>"
-echo "#"
+echo ""
 echo "#############################################################"
 echo ""
 
 # Get IP address
 IP=`ifconfig | grep 'inet addr:'| grep -v '127.0.0.*' | cut -d: -f2 | awk '{ print $1}' | head -1`
-#Current folder
+# Current folder
 cur_dir=`pwd`
 
 #===============================================================================================
@@ -33,7 +33,7 @@ function install_lamp(){
     disable_selinux
     pre_installation_settings
     install_apache
-    install_mysql
+    install_database
     install_php
     install_phpmyadmin
     cp -f $cur_dir/lamp.sh /usr/bin/lamp
@@ -45,7 +45,7 @@ function install_lamp(){
     echo 'Congratulations, Yum install LAMP completed!'
     echo "Your Default Website: http://${IP}"
     echo 'Default WebSite Root Dir: /data/www/default'
-    echo "MySQL root password:$mysqlrootpwd"
+    echo "MySQL root password:$dbrootpwd"
     echo ""
     echo "Welcome to visit:http://teddysun.com/lamp-yum"
     echo "Enjoy it! "
@@ -88,14 +88,38 @@ function pre_installation_settings(){
     fi
     # Update Atomic repository
     yum -y update atomic-release
+    # Choose databese
+    while true
+    do
+    echo "Please choose a version of the Database:"
+    echo -e "\t\033[32m1\033[0m. Install MariaDB-5.5(recommend)"
+    echo -e "\t\033[32m2\033[0m. Install MySQL-5.5"
+    read -p "Please input a number:(Default 1) " DB_version
+    [ -z "$DB_version" ] && DB_version=1
+    case $DB_version in
+        1|2)
+        echo ""
+        echo "---------------------------"
+        echo "You choose = $DB_version"
+        echo "---------------------------"
+        echo ""
+        break
+        ;;
+        *)
+        echo "Input error! Please only input number 1,2"
+    esac
+    done
     # Set MySQL root password
-    echo "Please input the root password of MySQL:"
-    read -p "(Default password: root):" mysqlrootpwd
-    if [ "$mysqlrootpwd" = "" ]; then
-        mysqlrootpwd="root"
+    echo "Please input the root password of MySQL or MariaDB:"
+    read -p "(Default password: root):" dbrootpwd
+    if [ -z $dbrootpwd ]; then
+        dbrootpwd="root"
     fi
-    echo "MySQL password:$mysqlrootpwd"
-    echo "####################################"
+    echo ""
+    echo "---------------------------"
+    echo "Password = $dbrootpwd"
+    echo "---------------------------"
+    echo ""
     get_char(){
         SAVEDSTTY=`stty -g`
         stty -echo
@@ -111,6 +135,7 @@ function pre_installation_settings(){
     # Remove Packages
     yum -y remove httpd*
     yum -y remove mysql*
+    yum -y remove mariadb*
     yum -y remove php*
     # Set timezone
     rm -f /etc/localtime
@@ -140,23 +165,60 @@ function install_apache(){
     cp -f $cur_dir/conf/phpinfo.php /data/www/default/phpinfo.php
     echo "Apache Install completed!"
 }
+
 #===============================================================================================
-#Description:install mysql.
+#Description:Install database
+#Usage:install_database
+#===============================================================================================
+function install_database(){
+    if [ $DB_version -eq 1 ]; then
+        install_mariadb
+    elif [ $DB_version -eq 2 ]; then
+        install_mysql
+    fi
+}
+
+#===============================================================================================
+#Description:Install MariaDB
+#Usage:install_mariadb
+#===============================================================================================
+function install_mariadb(){
+    # Install MariaDB
+    echo "Start Installing MariaDB..."
+    yum -y install mariadb mariadb-server
+    cp -f $cur_dir/conf/my.cnf /etc/my.cnf
+    chkconfig mysqld on
+    # Start mysqld service
+    service mysqld start
+    /usr/bin/mysqladmin password $dbrootpwd
+    /usr/bin/mysql -uroot -p$dbrootpwd <<EOF
+drop database if exists test;
+delete from mysql.user where user='';
+update mysql.user set password=password('$dbrootpwd') where user='root';
+delete from mysql.user where not (user='root') ;
+flush privileges;
+exit
+EOF
+    echo "MariaDB Install completed!"
+}
+
+#===============================================================================================
+#Description:Install MySQL.
 #Usage:install_mysql
 #===============================================================================================
 function install_mysql(){
-    #install MySQL
+    # Install MySQL
     echo "Start Installing MySQL..."
     yum -y install mysql mysql-server
     cp -f $cur_dir/conf/my.cnf /etc/my.cnf
     chkconfig mysqld on
-    #Start mysqld service
+    # Start mysqld service
     service mysqld start
-    /usr/bin/mysqladmin password $mysqlrootpwd
-mysql -uroot -p$mysqlrootpwd <<EOF
+    /usr/bin/mysqladmin password $dbrootpwd
+    /usr/bin/mysql -uroot -p$dbrootpwd <<EOF
 drop database if exists test;
 delete from mysql.user where user='';
-update mysql.user set password=password('$mysqlrootpwd') where user='root';
+update mysql.user set password=password('$dbrootpwd') where user='root';
 delete from mysql.user where not (user='root') ;
 flush privileges;
 exit
@@ -197,11 +259,12 @@ function install_phpmyadmin(){
         mv phpMyAdmin-${LATEST_PMA}-all-languages /data/www/default/phpmyadmin
         cp -f $cur_dir/conf/config.inc.php /data/www/default/phpmyadmin/config.inc.php
         #Create phpmyadmin database
-        /usr/bin/mysql -uroot -p$mysqlrootpwd < /data/www/default/phpmyadmin/examples/create_tables.sql
+        /usr/bin/mysql -uroot -p$dbrootpwd < /data/www/default/phpmyadmin/examples/create_tables.sql
         mkdir -p /data/www/default/phpmyadmin/upload/
         mkdir -p /data/www/default/phpmyadmin/save/
         cp -f /data/www/default/phpmyadmin/examples/create_tables.sql /data/www/default/phpmyadmin/upload/
         chown -R apache:apache /data/www/default/phpmyadmin
+        rm -f phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz
         echo "PHPMyAdmin Install completed!"
     else
         echo "PHPMyAdmin had been installed!"
@@ -215,6 +278,7 @@ function install_phpmyadmin(){
 #Usage:uninstall_lamp
 #===============================================================================================
 function uninstall_lamp(){
+    echo "Warning! All of your data will be deleted..."
     echo "Are you sure uninstall LAMP? (y/n)"
     read -p "(Default: n):" uninstall
     if [ -z $uninstall ]; then
@@ -247,16 +311,27 @@ function uninstall_lamp(){
     char=`get_char`
     echo ""
     if [[ "$uninstall" = "y" || "$uninstall" = "Y" ]]; then
+        cd ~
+        CHECK_MARIADB=$(mysql -V | grep -i 'MariaDB')
         killall httpd
         killall mysqld
         yum -y remove httpd*
-        yum -y remove mysql*
+        if [ -z CHECK_MARIADB ]; then
+            yum -y remove mysql*
+        else
+            yum -y remove mariadb*
+        fi
         yum -y remove php*
         rm -rf /data/www/default/phpmyadmin
+        rm -rf /etc/httpd
         rm -f /usr/bin/lamp
+        rm -f /etc/my.cnf.rpmsave
+        rm -f /etc/php.ini.rpmsave
         echo "Successfully uninstall LAMP!!"
     else
+        echo ""
         echo "Uninstall cancelled, nothing to do"
+        echo ""
     fi
 }
 
@@ -282,14 +357,14 @@ function vhost_add(){
     read -p "(Do you want to create database?[y/N]):" create
     case $create in
     y|Y|YES|yes|Yes)
-    read -p "(Please input the user root password of MySQL):" mysqlroot_passwd
+    read -p "(Please input the user root password of MySQL or MariaDB):" mysqlroot_passwd
     /usr/bin/mysql -uroot -p$mysqlroot_passwd <<EOF
 exit
 EOF
     if [ $? -eq 0 ]; then
-        echo "MySQL root password is correct.";
+        echo "MySQL or MariaDB root password is correct.";
     else
-        echo "MySQL root password incorrect! Please check it and try again!"
+        echo "MySQL or MariaDB root password incorrect! Please check it and try again!"
         exit 1
     fi
     read -p "(Please input the database name):" dbname
@@ -338,12 +413,12 @@ php_admin_value open_basedir $DocumentRoot:/tmp
 </Directory>
 </virtualhost>
 EOF
-    service httpd reload > /dev/null 2>&1
+    service httpd restart > /dev/null 2>&1
     echo "Successfully create $domain vhost"
     echo "######################### information about your website ############################"
     echo "The DocumentRoot:$DocumentRoot"
     echo "The Logsdir:$logsdir"
-    [ "$create" == "y" ] && echo "MySQL dbname and user:$dbname and password:$mysqlpwd"
+    [ "$create" == "y" ] && echo "database name and user:$dbname and password:$mysqlpwd"
 }
 
 #===============================================================================

@@ -13,15 +13,16 @@ clear
 echo "#############################################################"
 echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora"
 echo "# Intro: http://teddysun.com/lamp-yum"
-echo ""
+echo "#"
 echo "# Author: Teddysun <i@teddysun.com>"
-echo ""
+echo "#"
 echo "#############################################################"
 echo ""
 
 # Get IP address
 IP=`curl -s checkip.dyndns.com | cut -d' ' -f 6  | cut -d'<' -f 1`
-if [ -z $IP ]; then
+if [ $? -ne 0 -o -z $IP ]; then
+    yum install -y curl curl-devel
     IP=`curl -s ifconfig.me/ip`
 fi
 # Current folder

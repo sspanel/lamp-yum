@@ -20,7 +20,10 @@ echo "#############################################################"
 echo ""
 
 # Get IP address
-IP=`ifconfig | grep 'inet addr:'| grep -v '127.0.0.*' | cut -d: -f2 | awk '{ print $1}' | head -1`
+IP=`curl -s checkip.dyndns.com | cut -d' ' -f 6  | cut -d'<' -f 1`
+if [ -z $IP ]; then
+    IP=`curl -s ifconfig.me/ip`
+fi
 # Current folder
 cur_dir=`pwd`
 

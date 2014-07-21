@@ -24,8 +24,8 @@
 ## 将会安装（yum 安装）
 * 1、Apache 2.2.15
 * 2、MySQL 5.5.38 或 MariaDB 5.5.37
-* 3、PHP 5.4.29
-* 4、phpMyAdmin 4.2.4
+* 3、PHP 5.4.30
+* 4、phpMyAdmin 4.2.6
 * 5、xcache
 * 6、Zend Guard Loader
 * 7、ionCube PHP Loader

@@ -251,7 +251,7 @@ function install_php(){
 function install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
-        LATEST_PMA=$(elinks http://iweb.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/ | awk -F/ '{print $7F}' | grep -iv '-' | grep -iv 'rst' | tail -1)
+        LATEST_PMA=$(elinks http://iweb.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/ | awk -F/ '{print $7F}' | grep -iv '-' | grep -iv 'rst' | grep -iv ';' | sort -r | head -1)
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
         cd $cur_dir
         if [ -s phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz ]; then

@@ -22,8 +22,8 @@
 * 一键卸载。
 
 ## 将会安装（yum 安装）
-* 1、Apache 2.2.15
-* 2、MySQL 5.5.38 或 MariaDB 5.5.37
+* 1、Apache
+* 2、MySQL 5.5.39 或 MariaDB 5.5.37
 * 3、PHP 5.4.31
 * 4、phpMyAdmin 4.2.7.1
 * 5、xcache
@@ -33,6 +33,7 @@
 ## 如何安装
 ### 第一步，下载、解压、赋予权限：
 
+    yum install -y unzip
     wget --no-check-certificate https://github.com/teddysun/lamp-yum/archive/master.zip -O lamp-yum.zip
     unzip lamp-yum.zip
     cd lamp-yum-master/
@@ -58,12 +59,10 @@
 * MySQL 或 MariaDB 命令: 
 
         /etc/init.d/mysqld(start|stop|restart|reload|status)
-        service mysqld(start|stop|restart|reload|status)
 
 * Apache 命令: 
 
         /etc/init.d/httpd(start|stop|restart|reload|status)
-        service httpd(start|stop|restart|reload|status)      
 
 如果你在安装后使用遇到问题，请访问 [http://teddysun.com/lamp-yum](http://teddysun.com/lamp-yum) 或发邮件至 i@teddysun.com。
 

@@ -19,19 +19,18 @@ echo "#"
 echo "#############################################################"
 echo ""
 
-# Get IP address
-IP=`curl -s checkip.dyndns.com | cut -d' ' -f 6  | cut -d'<' -f 1`
-if [ $? -ne 0 -o -z $IP ]; then
-    yum install -y curl curl-devel
-    IP=`curl -s ifconfig.me/ip`
-fi
+# Get public IP
+function getIP(){
+    IP=`curl -s checkip.dyndns.com | cut -d' ' -f 6  | cut -d'<' -f 1`
+    if [ $? -ne 0 -o -z "$IP" ]; then
+        yum install -y curl curl-devel
+        IP=`curl -s ifconfig.me/ip`
+    fi
+}
 # Current folder
 cur_dir=`pwd`
 
-#===============================================================================================
-#Description:Install LAMP Script.
-#Usage:install_lamp
-#===============================================================================================
+# Install LAMP Script
 function install_lamp(){
     rootness
     disable_selinux
@@ -56,22 +55,15 @@ function install_lamp(){
     echo ""
 }
 
-#===============================================================================================
-#Description:Make sure only root can run our script
-#Usage:rootness
-#===============================================================================================
-function rootness(){
 # Make sure only root can run our script
+function rootness(){
 if [[ $EUID -ne 0 ]]; then
    echo "Error:This script must be run as root!" 1>&2
    exit 1
 fi
 }
 
-#===============================================================================================
-#Description:Disable selinux
-#Usage:disable_selinux
-#===============================================================================================
+# Disable selinux
 function disable_selinux(){
 if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
     sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
@@ -79,10 +71,7 @@ if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; t
 fi
 }
 
-#===============================================================================================
-#Description:Pre-installation settings.
-#Usage:pre_installation_settings
-#===============================================================================================
+# Pre-installation settings
 function pre_installation_settings(){
     # Install Atomic repository
     wget -q -O - http://www.atomicorp.com/installers/atomic | sh
@@ -92,6 +81,11 @@ function pre_installation_settings(){
     fi
     # Update Atomic repository
     yum -y update atomic-release
+    # Display Public IP
+    echo "Getting Public IP address..."
+    getIP
+    echo -e "Your main public IP is\t\033[32m$IP\033[0m"
+    echo ""
     # Choose databese
     while true
     do
@@ -148,10 +142,7 @@ function pre_installation_settings(){
     ntpdate -d cn.pool.ntp.org
 }
 
-#===============================================================================================
-#Description:Install Apache.
-#Usage:install_apache
-#===============================================================================================
+# Install Apache
 function install_apache(){
     # Install Apache
     echo "Start Installing Apache..."
@@ -170,10 +161,7 @@ function install_apache(){
     echo "Apache Install completed!"
 }
 
-#===============================================================================================
-#Description:Install database
-#Usage:install_database
-#===============================================================================================
+# Install database
 function install_database(){
     if [ $DB_version -eq 1 ]; then
         install_mariadb
@@ -182,10 +170,7 @@ function install_database(){
     fi
 }
 
-#===============================================================================================
-#Description:Install MariaDB
-#Usage:install_mariadb
-#===============================================================================================
+# Install MariaDB
 function install_mariadb(){
     # Install MariaDB
     echo "Start Installing MariaDB..."
@@ -206,10 +191,7 @@ EOF
     echo "MariaDB Install completed!"
 }
 
-#===============================================================================================
-#Description:Install MySQL.
-#Usage:install_mysql
-#===============================================================================================
+# Install MySQL
 function install_mysql(){
     # Install MySQL
     echo "Start Installing MySQL..."
@@ -230,10 +212,7 @@ EOF
     echo "MySQL Install completed!"
 }
 
-#===============================================================================================
-#Description:install php.
-#Usage:install_php
-#===============================================================================================
+# Install php5.4
 function install_php(){
     #install PHP
     echo "Start Installing PHP..."
@@ -244,10 +223,7 @@ function install_php(){
     cp -f $cur_dir/conf/php.ini /etc/php.ini
     echo "PHP install completed!"
 }
-#===============================================================================================
-#Description:install phpmyadmin.
-#Usage:install_phpmyadmin
-#===============================================================================================
+# Install phpmyadmin.
 function install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
@@ -277,10 +253,7 @@ function install_phpmyadmin(){
     service httpd start
 }
 
-#===============================================================================================
-#Description:uninstall lamp.
-#Usage:uninstall_lamp
-#===============================================================================================
+# Uninstall lamp
 function uninstall_lamp(){
     echo "Warning! All of your data will be deleted..."
     echo "Are you sure uninstall LAMP? (y/n)"
@@ -339,10 +312,7 @@ function uninstall_lamp(){
     fi
 }
 
-#===============================================================================
-#Description:Add apache virtualhost.
-#Usage:vhost_add
-#===============================================================================
+# Add apache virtualhost
 function vhost_add(){
     #Define domain name
     read -p "(Please input domains such as:www.example.com):" domains
@@ -425,10 +395,7 @@ EOF
     [ "$create" == "y" ] && echo "database name and user:$dbname and password:$mysqlpwd"
 }
 
-#===============================================================================
-#Description:Remove apache virtualhost.
-#Usage:vhost_del
-#===============================================================================
+# Remove apache virtualhost
 function vhost_del(){
     read -p "(Please input a domain you want to delete):" vhost_domain
     if [ "$vhost_domain" = "" ]; then
@@ -464,18 +431,12 @@ function vhost_del(){
     echo "Successfully delete $vhost_domain vhost"
 }
 
-#===============================================================================
-#Description:List apache virtualhost.
-#Usage:vhost_list
-#===============================================================================
+# List apache virtualhost
 function vhost_list(){
     ls /etc/httpd/conf.d/ | grep -v "php.conf" | grep -v "none.conf" | cut -f 1,2,3 -d "."
 }
 
-#===============================================================================================
-#Description:Initialization step
-#Usage:none
-#===============================================================================================
+# Initialization step
 action=$1
 [  -z $1 ] && action=install
 case "$action" in

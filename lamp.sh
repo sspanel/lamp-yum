@@ -433,7 +433,7 @@ function vhost_del(){
 
 # List apache virtualhost
 function vhost_list(){
-    ls /etc/httpd/conf.d/ | grep -v "php.conf" | grep -v "none.conf" | cut -f 1,2,3 -d "."
+    ls /etc/httpd/conf.d/ | grep -v "php.conf" | grep -v "none.conf" | grep -v "welcome.conf" | grep -iv "README" | cut -f 1,2,3 -d "."
 }
 
 # Initialization step

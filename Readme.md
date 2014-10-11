@@ -8,7 +8,7 @@
 * 服务器必须配置好软件源和可连接外网
 * 必须具有系统 Root 权限
 * 建议使用干净系统全新安装
-* 日期：2014年08月18日
+* 日期：2014年06月25日
 
 ## 关于本脚本
 * 一键 yum 安装所有的软件包，方便升级；
@@ -23,9 +23,9 @@
 
 ## 将会安装（yum 安装）
 * 1、Apache
-* 2、MySQL 5.5.39 或 MariaDB 5.5.37
-* 3、PHP 5.4.31
-* 4、phpMyAdmin 4.2.7.1
+* 2、MySQL 或 MariaDB latest version
+* 3、PHP latest version
+* 4、phpMyAdmin latest version
 * 5、xcache
 * 6、Zend Guard Loader
 * 7、ionCube PHP Loader

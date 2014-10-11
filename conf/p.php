@@ -656,7 +656,7 @@ input.btn{font-weight: bold; height: 20px; line-height: 20px; padding: 0 6px; co
 .static{color: #009900;}
 -->
 </style>
-<script language="JavaScript" type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="./jquery.js"></script>
 <script type="text/javascript"> 
 <!--
 $(document).ready(function(){getJSONData();});
@@ -1205,7 +1205,7 @@ else
 }
 ?>
     </td>
-    <td width="20%"><?php if($PHP_VERSION > 2){if(function_exists("zend_loader_version")){ echo '<font color=green>√</font>　Ver ';echo zend_loader_version();}} else{if(function_exists('zend_optimizer_version')){ echo '<font color=green>√</font>　Ver ';echo zend_optimizer_version();}else{    echo (get_cfg_var("zend_optimizer.optimization_level")||get_cfg_var("zend_extension_manager.optimizer_ts")||get_cfg_var("zend.ze1_compatibility_mode")||get_cfg_var("zend_extension_ts"))?'<font color=green>√</font>':'<font color=red>×</font>';}}?></td>
+    <td width="20%"><?php if($PHP_VERSION > 2){if(function_exists("zend_loader_version")){ echo '<font color=green>√</font>　Ver ';echo zend_loader_version();} else { echo '<font color=red>×</font>';}} else{if(function_exists('zend_optimizer_version')){ echo '<font color=green>√</font>　Ver ';echo zend_optimizer_version();}else{    echo (get_cfg_var("zend_optimizer.optimization_level")||get_cfg_var("zend_extension_manager.optimizer_ts")||get_cfg_var("zend.ze1_compatibility_mode")||get_cfg_var("zend_extension_ts"))?'<font color=green>√</font>':'<font color=red>×</font>';}}?></td>
   </tr>
 
   <tr>
@@ -1218,8 +1218,8 @@ else
   <tr>
     <td>XCache</td>
     <td><?php if((phpversion('XCache'))!=''){echo '<font color=green>√</font>　Ver ';echo phpversion('XCache');}else{ echo "<font color=red>×</font>";} ?></td>
-    <td>APC</td>
-    <td><?php if((phpversion('APC'))!=''){echo '<font color=green>√</font>　Ver ';echo phpversion('APC');}else{ echo "<font color=red>×</font>";} ?></td>
+    <td>Zend OPcache</td>
+    <td><?php if(function_exists('opcache_get_configuration')){echo '<font color=green>√</font>　Ver ';$configuration=call_user_func('opcache_get_configuration'); echo $configuration['version']['version'];}else{ echo "<font color=red>×</font>";} ?></td>
   </tr>
 </table>
 

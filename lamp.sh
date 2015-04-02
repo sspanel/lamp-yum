@@ -10,21 +10,19 @@ export PATH
 #===============================================================================================
 
 clear
+echo ""
 echo "#############################################################"
-echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora"
-echo "# Intro: http://teddysun.com/lamp-yum"
-echo "#"
-echo "# Author: Teddysun <i@teddysun.com>"
-echo "#"
+echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora #"
+echo "# Intro: http://teddysun.com/lamp-yum                       #"
+echo "# Author: Teddysun <i@teddysun.com>                         #"
 echo "#############################################################"
 echo ""
 
 # Get public IP
 function getIP(){
-    IP=`curl -s checkip.dyndns.com | cut -d' ' -f 6  | cut -d'<' -f 1`
-    if [ $? -ne 0 -o -z "$IP" ]; then
-        yum install -y curl curl-devel
-        IP=`curl -s ifconfig.me/ip`
+    IP=$(curl -s -4 icanhazip.com)
+    if [[ "$IP" = "" ]]; then
+        IP=$(curl -s -4 ipinfo.io | grep "ip" | awk -F\" '{print $4}')
     fi
 }
 # Current folder

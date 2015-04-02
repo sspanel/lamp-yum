@@ -14,13 +14,12 @@ fi
 cur_dir=`pwd`
 
 clear
+echo ""
 echo "#############################################################"
-echo "# Auto Update Script for phpMyAdmin"
-echo "# System Required:  CentOS / RedHat / Fedora"
-echo "# Intro: http://teddysun.com/lamp"
-echo ""
-echo "# Author: Teddysun <i@teddysun.com>"
-echo ""
+echo "# Auto Update Script for phpMyAdmin                         #"
+echo "# System Required:  CentOS / RedHat / Fedora                #"
+echo "# Intro: http://teddysun.com/lamp                           #"
+echo "# Author: Teddysun <i@teddysun.com>                         #"
 echo "#############################################################"
 echo ""
 

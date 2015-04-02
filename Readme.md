@@ -8,7 +8,7 @@
 * 服务器必须配置好软件源和可连接外网
 * 必须具有系统 Root 权限
 * 建议使用干净系统全新安装
-* 日期：2014年12月08日
+* 日期：2015年04月02日
 
 ## 关于本脚本
 * 一键 yum 安装所有的软件包，方便升级；
@@ -26,7 +26,7 @@
 * 2、MySQL 或 MariaDB latest version
 * 3、PHP latest version
 * 4、phpMyAdmin latest version
-* 5、xcache
+* 5、Xcache
 * 6、Zend Guard Loader
 * 7、ionCube PHP Loader
 
@@ -46,14 +46,12 @@
 
 ##使用提示：
 
-* lamp add(del,list)：创建（删除，列出）虚拟主机。
 * lamp uninstall：一键删除 LAMP （切记，删除之前注意备份好数据！）
 
 ##目录说明：
 
 * MySQL 或 MariaDB 数据库目录： /var/lib/mysql/
 * 默认的网站根目录： /data/www/default
-* 新建虚拟主机目录： /data/www/domain（此处 domain 为添加的域名）
 
 ##命令一览：
 * MySQL 或 MariaDB 命令: 

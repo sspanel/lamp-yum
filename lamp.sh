@@ -289,8 +289,8 @@ function uninstall_lamp(){
     if [[ "$uninstall" = "y" || "$uninstall" = "Y" ]]; then
         cd ~
         CHECK_MARIADB=$(mysql -V | grep -i 'MariaDB')
-        killall httpd
-        killall mysqld
+        service httpd stop
+        service mysqld stop
         yum -y remove httpd*
         if [ -z CHECK_MARIADB ]; then
             yum -y remove mysql*

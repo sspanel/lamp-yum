@@ -20,11 +20,12 @@ echo ""
 
 # Get public IP
 function getIP(){
-    IP=$(curl -s -4 icanhazip.com)
+    IP=`ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1`
     if [[ "$IP" = "" ]]; then
-        IP=$(curl -s -4 ipinfo.io | grep "ip" | awk -F\" '{print $4}')
+        IP=`curl -s -4 icanhazip.com`
     fi
 }
+
 # Current folder
 cur_dir=`pwd`
 
@@ -88,8 +89,8 @@ function pre_installation_settings(){
     while true
     do
     echo "Please choose a version of the Database:"
-    echo -e "\t\033[32m1\033[0m. Install MariaDB-5.5(recommend)"
-    echo -e "\t\033[32m2\033[0m. Install MySQL-5.5"
+    echo -e "\t\033[32m1\033[0m. Install MySQL-5.5(recommend)"
+    echo -e "\t\033[32m2\033[0m. Install MariaDB-5.5"
     read -p "Please input a number:(Default 1) " DB_version
     [ -z "$DB_version" ] && DB_version=1
     case $DB_version in
@@ -162,9 +163,9 @@ function install_apache(){
 # Install database
 function install_database(){
     if [ $DB_version -eq 1 ]; then
-        install_mariadb
-    elif [ $DB_version -eq 2 ]; then
         install_mysql
+    elif [ $DB_version -eq 2 ]; then
+        install_mariadb
     fi
 }
 
@@ -237,10 +238,10 @@ function install_phpmyadmin(){
         mv phpMyAdmin-${LATEST_PMA}-all-languages /data/www/default/phpmyadmin
         cp -f $cur_dir/conf/config.inc.php /data/www/default/phpmyadmin/config.inc.php
         #Create phpmyadmin database
-        /usr/bin/mysql -uroot -p$dbrootpwd < /data/www/default/phpmyadmin/examples/create_tables.sql
+        /usr/bin/mysql -uroot -p$dbrootpwd < /data/www/default/phpmyadmin/sql/create_tables.sql
         mkdir -p /data/www/default/phpmyadmin/upload/
         mkdir -p /data/www/default/phpmyadmin/save/
-        cp -f /data/www/default/phpmyadmin/examples/create_tables.sql /data/www/default/phpmyadmin/upload/
+        cp -f /data/www/default/phpmyadmin/sql/create_tables.sql /data/www/default/phpmyadmin/upload/
         chown -R apache:apache /data/www/default/phpmyadmin
         rm -f phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz
         echo "PHPMyAdmin Install completed!"

@@ -124,14 +124,18 @@ if [[ "$UPGRADE_PMA" = "y" || "$UPGRADE_PMA" = "Y" ]];then
     fi
     mkdir -p /data/www/default/phpmyadmin/upload/
     mkdir -p /data/www/default/phpmyadmin/save/
-    cp -f /data/www/default/phpmyadmin/examples/create_tables.sql /data/www/default/phpmyadmin/upload/
+    if [ -s /data/www/default/phpmyadmin/examples/create_tables.sql ]; then
+        cp -f /data/www/default/phpmyadmin/examples/create_tables.sql /data/www/default/phpmyadmin/upload/
+    elif [ -s /data/www/default/phpmyadmin/sql/create_tables.sql ]; then
+        cp -f /data/www/default/phpmyadmin/sql/create_tables.sql /data/www/default/phpmyadmin/upload/
+    fi
     chown -R apache:apache /data/www/default/phpmyadmin
     # clean phpMyAdmin archive
     cd $cur_dir
     rm -rf $cur_dir/pmaversion.txt
     echo -e "phpmyadmin\t${LATEST_PMA}" > $cur_dir/pmaversion.txt
     rm -rf $cur_dir/phpMyAdmin-$LATEST_PMA-all-languages
-    # Reload httpd service
+    # Restart httpd service
     service httpd restart
     echo "===================== phpMyAdmin update completed! ===================="
 else

@@ -9,18 +9,28 @@
 body {
 color:#333333;
 font-family:"Microsoft YaHei",tahoma,arial,helvetica,sans-serif;
+font-size:15px;
 }
-.links {color: #009900}
+.links {color: #06C}
 #main {
     margin-right: auto;
     margin-left: auto;
     width: 650px;
 }
+a{
+text-decoration:none; 
+color:#06C; 
+-webkit-transition:color .2s; 
+-moz-transition:color .2s; 
+-ms-transition:color .2s; 
+-o-transition:color .2s; 
+transition:color .2s
+}
 </style> 
 </head> 
 <body> 
 <div id="main"> 
-  <p align="center"><font color=red>恭喜，LAMP一键安装包安装成功！</font></p>
+  <p align="center"><span style="font-size:18px;color:red;">恭喜，LAMP 一键 yum 安装包安装成功！</span></p>
   <p align="center"><img src="./lamp.gif" alt="LAMP一键安装包"></p>
   <p align="left">
     <span><b>查看本地环境：</b></span>
@@ -30,7 +40,7 @@ font-family:"Microsoft YaHei",tahoma,arial,helvetica,sans-serif;
   </p>
   <p align="left"><span class="STYLE1"><b>LAMP使用方法：</b></span></p>
   <p align="left"><li>lamp add|del|list：创建（删除，列出）虚拟主机。</li></p>
-  <p align="left"><li>lamp uninstall：一键卸载lamp（卸载之前注意备份好数据！）。</li></p>
+  <p align="left"><li>lamp uninstall：一键卸载 LAMP（卸载之前注意备份好数据）。</li></p>
   <p align="left"><span class="STYLE1"><b>命令一览：</b></span></p>
   <p align="left"><li>MySQL 或 MariaDB 命令：/etc/init.d/mysqld(start|stop|restart|reload|status)</li></p>
   <p align="left"><li>Apache 命令：/etc/init.d/httpd(start|stop|restart|reload|status)</li></p>
@@ -39,9 +49,9 @@ font-family:"Microsoft YaHei",tahoma,arial,helvetica,sans-serif;
   <p align="left"><span class="STYLE1"><b>关于本脚本的说明：</b></span></p>
   <p align="left"><li>1、本脚本全部采用 yum 安装，升级方便；</li></p>
   <p align="left"><li>2、Apache 为默认版本，MySQL 或 MariaDB，PHP 则是 <a href="http://www.atomicorp.com/channels/atomic/" target="_blank">Atomic repository</a> 的最新版。</li></p>
-  <p align="left"><li>3、如果你的 VPS 内存 ≥ 256M，建议编译安装 LAMP，详见：<a href="http://teddysun.com/lamp" target="_blank">这里</a></li></p>
+  <p align="left"><li>3、如果你的 VPS 内存 ≥ 256M，建议编译安装 LAMP，详见：<a href="http://teddysun.com/lamp" target="_blank">LAMP一键安装脚本</a></li></p>
   <p align="center"><hr></p>
-  <p align="center">LAMP一键安装包 by <a href="http://teddysun.com/lamp-yum" target="_blank">Teddysun</a></p> 
+  <p align="center">LAMP一键 yum 安装包 by <a href="http://teddysun.com/lamp-yum" target="_blank">Teddysun</a></p> 
 </div>
 </body>
 </html>

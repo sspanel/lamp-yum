@@ -216,7 +216,7 @@ function install_php(){
     #install PHP
     echo "Start Installing PHP..."
     yum -y install libjpeg-devel libpng-devel elinks
-    yum -y install php php-devel php-cli php-mysql php-mcrypt php-mbstring php-xml php-xmlrpc php-common
+    yum -y install php php-devel php-cli php-mysqlnd php-mcrypt php-mbstring php-xml php-xmlrpc php-common
     yum -y install php-gd php-pdo php-bcmath php-xmlrpc php-imap php-odbc php-ldap php-mhash php-intl
     yum -y install php-xcache php-ioncube-loader php-zend-guard-loader php-snmp php-soap php-tidy
     cp -f $cur_dir/conf/php.ini /etc/php.ini

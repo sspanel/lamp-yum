@@ -226,13 +226,16 @@ function install_php(){
 function install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
-        LATEST_PMA=$(elinks http://iweb.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/ | awk -F/ '{print $7F}' | grep -iv '-' | grep -iv 'rst' | grep -iv ';' | sort -V | tail -1)
+        LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | cut -d'<' -f1 | sort -V | tail -1)
+        if [ -z $LATEST_PMA ]; then
+            LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | tail -1 | awk -F- '{print $2}')
+        fi
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
         cd $cur_dir
         if [ -s phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz ]; then
             echo "phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz [found]"
         else
-            wget -c http://iweb.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/${LATEST_PMA}/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz
+            wget -c http://files.phpmyadmin.net/phpMyAdmin/${LATEST_PMA}/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz
             tar zxf phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz
         fi
         mv phpMyAdmin-${LATEST_PMA}-all-languages /data/www/default/phpmyadmin

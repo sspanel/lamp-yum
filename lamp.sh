@@ -295,7 +295,7 @@ function uninstall_lamp(){
         service httpd stop
         service mysqld stop
         yum -y remove httpd*
-        if [ -z CHECK_MARIADB ]; then
+        if [ -z $CHECK_MARIADB ]; then
             yum -y remove mysql*
         else
             yum -y remove mariadb*
@@ -309,7 +309,7 @@ function uninstall_lamp(){
         echo "Successfully uninstall LAMP!!"
     else
         echo ""
-        echo "Uninstall cancelled, nothing to do"
+        echo "Uninstall cancelled, nothing to do..."
         echo ""
     fi
 }

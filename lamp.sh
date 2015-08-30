@@ -226,9 +226,9 @@ function install_php(){
 function install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
-        LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | cut -d'<' -f1 | sort -V | tail -1)
+        LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
         if [ -z $LATEST_PMA ]; then
-            LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | tail -1 | awk -F- '{print $2}')
+            LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
         fi
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
         cd $cur_dir

@@ -8,7 +8,7 @@
 * 服务器必须配置好软件源和可连接外网
 * 必须具有系统 Root 权限
 * 建议使用干净系统全新安装
-* 日期：2015年05月27日
+* 日期：2015 年 08 月 30 日
 
 ## 关于本脚本
 * 一键 yum 安装所有的软件包，方便升级；
@@ -21,7 +21,7 @@
 * 命令行新增虚拟主机，操作简便；
 * 一键卸载。
 
-## 将会安装（yum 安装）
+## 将会安装（通过 yum 安装）
 * 1、Apache
 * 2、MySQL 5.5 or MariaDB 5.5 latest version
 * 3、PHP 5.4 latest version
@@ -64,4 +64,4 @@
 
 如果你在安装后使用遇到问题，请访问 [http://teddysun.com/lamp-yum](http://teddysun.com/lamp-yum) 或发邮件至 i@teddysun.com。
 
-最后，祝你使用愉快！
+祝你使用愉快！

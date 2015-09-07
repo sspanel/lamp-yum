@@ -62,6 +62,6 @@
 
         /etc/init.d/httpd(start|stop|restart|reload|status)
 
-如果你在安装后使用遇到问题，请访问 [http://teddysun.com/lamp-yum](http://teddysun.com/lamp-yum) 或发邮件至 i@teddysun.com。
+如果你在安装后使用遇到问题，请访问 [https://teddysun.com/lamp-yum](https://teddysun.com/lamp-yum) 提交评论。
 
-祝你使用愉快！
+Copyright (C) 2015 Teddysun <i@teddysun.com>

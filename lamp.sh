@@ -5,7 +5,7 @@ export PATH
 #   System Required:  CentOS / RedHat / Fedora
 #   Description:  Yum Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )
 #   Author: Teddysun <i@teddysun.com>
-#   Intro:  http://teddysun.com/lamp-yum
+#   Intro:  https://teddysun.com/lamp-yum
 #           https://github.com/teddysun/lamp-yum
 #===============================================================================================
 
@@ -13,7 +13,7 @@ clear
 echo ""
 echo "#############################################################"
 echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora #"
-echo "# Intro: http://teddysun.com/lamp-yum                       #"
+echo "# Intro: https://teddysun.com/lamp-yum                      #"
 echo "# Author: Teddysun <i@teddysun.com>                         #"
 echo "#############################################################"
 echo ""
@@ -39,8 +39,6 @@ function install_lamp(){
     install_php
     install_phpmyadmin
     cp -f $cur_dir/lamp.sh /usr/bin/lamp
-    sed -i '/Order/,/All/d' /usr/bin/lamp
-    sed -i "/AllowOverride All/i\Require all granted" /usr/bin/lamp
     chmod +x /usr/bin/lamp
     clear
     echo ""
@@ -49,7 +47,7 @@ function install_lamp(){
     echo 'Default WebSite Root Dir: /data/www/default'
     echo "MySQL root password:$dbrootpwd"
     echo ""
-    echo "Welcome to visit:http://teddysun.com/lamp-yum"
+    echo "Welcome to visit:https://teddysun.com/lamp-yum"
     echo "Enjoy it! "
     echo ""
 }
@@ -227,7 +225,7 @@ function install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
         LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
-        if [ -z $LATEST_PMA ]; then
+        if [[ -z $LATEST_PMA ]]; then
             LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
         fi
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
@@ -440,7 +438,7 @@ function vhost_list(){
 
 # Initialization step
 action=$1
-[  -z $1 ] && action=install
+[ -z $1 ] && action=install
 case "$action" in
 install)
     install_lamp

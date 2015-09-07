@@ -5,7 +5,7 @@ export PATH
 #   System Required:  CentOS / RedHat / Fedora
 #   Description:  Auto Update Script for phpMyAdmin
 #   Author: Teddysun <i@teddysun.com>
-#   Intro:  http://teddysun.com/lamp
+#   Intro:  https://teddysun.com/lamp-yum
 #===============================================================================================
 if [[ $EUID -ne 0 ]]; then
    echo "Error:This script must be run as root!" 1>&2
@@ -18,7 +18,7 @@ echo ""
 echo "#############################################################"
 echo "# Auto Update Script for phpMyAdmin                         #"
 echo "# System Required:  CentOS / RedHat / Fedora                #"
-echo "# Intro: http://teddysun.com/lamp                           #"
+echo "# Intro: https://teddysun.com/lamp-yum                      #"
 echo "# Author: Teddysun <i@teddysun.com>                         #"
 echo "#############################################################"
 echo ""
@@ -36,15 +36,15 @@ else
 fi
 
 LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
-if [ -z $LATEST_PMA ]; then
-    LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | tail -1 | awk -F- '{print $2}')
+if [[ -z $LATEST_PMA ]]; then
+    LATEST_PMA=$(curl -s http://lamp.teddysun.com/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
 fi
 echo -e "Latest version of phpmyadmin: \033[41;37m $LATEST_PMA \033[0m"
 echo -e "Installed version of phpmyadmin: \033[41;37m $INSTALLED_PMA \033[0m"
 echo ""
 echo "Do you want to upgrade phpmyadmin ? (y/n)"
 read -p "(Default: n):" UPGRADE_PMA
-if [ -z $UPGRADE_PMA ]; then
+if [[ -z $UPGRADE_PMA ]]; then
     UPGRADE_PMA="n"
 fi
 echo "---------------------------"

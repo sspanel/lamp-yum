@@ -10,13 +10,9 @@ export PATH
 #===============================================================================================
 
 clear
-echo ""
-echo "#############################################################"
-echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora #"
-echo "# Intro: https://teddysun.com/lamp-yum                      #"
-echo "# Author: Teddysun <i@teddysun.com>                         #"
-echo "#############################################################"
-echo ""
+
+# Current folder
+cur_dir=`pwd`
 
 # Get public IP
 function getIP(){
@@ -25,9 +21,6 @@ function getIP(){
         IP=`curl -s -4 icanhazip.com`
     fi
 }
-
-# Current folder
-cur_dir=`pwd`
 
 # Install LAMP Script
 function install_lamp(){
@@ -70,14 +63,19 @@ fi
 
 # Pre-installation settings
 function pre_installation_settings(){
+    echo ""
+    echo "#############################################################"
+    echo "# LAMP Auto yum Install Script for CentOS / RedHat / Fedora #"
+    echo "# Intro: https://teddysun.com/lamp-yum                      #"
+    echo "# Author: Teddysun <i@teddysun.com>                         #"
+    echo "#############################################################"
+    echo ""
     # Install Atomic repository
-    wget -q -O - http://www.atomicorp.com/installers/atomic | sh
+    wget -qO- http://www.atomicorp.com/installers/atomic | bash
     if [ $? -ne 0 ]; then
         echo "Error:Atomic repository must be installed!"
         exit 1
     fi
-    # Update Atomic repository
-    yum -y update atomic-release
     # Display Public IP
     echo "Getting Public IP address..."
     getIP
@@ -115,6 +113,28 @@ function pre_installation_settings(){
     echo "Password = $dbrootpwd"
     echo "---------------------------"
     echo ""
+    # Choose PHP version
+    while true
+    do
+    echo "Please choose a version of the PHP:"
+    echo -e "\t\033[32m1\033[0m. Install PHP-5.4"
+    echo -e "\t\033[32m2\033[0m. Install PHP-5.5"
+    echo -e "\t\033[32m3\033[0m. Install PHP-5.6"
+    read -p "Please input a number:(Default 1) " PHP_version
+    [ -z "$PHP_version" ] && PHP_version=1
+    case $PHP_version in
+        1|2|3)
+        echo ""
+        echo "---------------------------"
+        echo "You choose = $PHP_version"
+        echo "---------------------------"
+        echo ""
+        break
+        ;;
+        *)
+        echo "Input error! Please only input number 1,2,3"
+    esac
+    done
     get_char(){
         SAVEDSTTY=`stty -g`
         stty -echo
@@ -209,14 +229,25 @@ EOF
     echo "MySQL Install completed!"
 }
 
-# Install php5.4
+# Install PHP
 function install_php(){
-    #install PHP
     echo "Start Installing PHP..."
-    yum -y install libjpeg-devel libpng-devel elinks
-    yum -y install php php-devel php-cli php-pdo php-mysqlnd php-mcrypt php-mbstring php-xml php-xmlrpc php-common
-    yum -y install php-gd php-bcmath php-imap php-odbc php-ldap php-mhash php-intl
-    yum -y install php-xcache php-ioncube-loader php-zend-guard-loader php-snmp php-soap php-tidy
+    yum -y install libjpeg-devel libpng-devel
+    if [ $PHP_version -eq 1 ]; then
+        yum -y install php php-cli php-common php-devel php-pdo php-mysqlnd php-mcrypt php-mbstring php-xml php-xmlrpc
+        yum -y install php-gd php-bcmath php-imap php-odbc php-ldap php-mhash php-intl
+        yum -y install php-xcache php-ioncube-loader php-zend-guard-loader php-snmp php-soap php-tidy
+    fi
+    if [ $PHP_version -eq 2 ]; then
+        yum -y install atomic-php55-php atomic-php55-php-cli atomic-php55-php-common atomic-php55-php-devel atomic-php55-php-pdo atomic-php55-php-mysqlnd atomic-php55-php-mcrypt atomic-php55-php-mbstring atomic-php55-php-xml atomic-php55-php-xmlrpc
+        yum -y install atomic-php55-php-gd atomic-php55-php-bcmath atomic-php55-php-imap atomic-php55-php-odbc atomic-php55-php-ldap atomic-php55-php-mhash atomic-php55-php-intl
+        yum -y install atomic-php55-php-snmp atomic-php55-php-soap atomic-php55-php-tidy atomic-php55-php-opcache
+    fi
+    if [ $PHP_version -eq 3 ]; then
+        yum -y install atomic-php56-php atomic-php56-php-cli atomic-php56-php-common atomic-php56-php-devel atomic-php56-php-pdo atomic-php56-php-mysqlnd atomic-php56-php-mcrypt atomic-php56-php-mbstring atomic-php56-php-xml atomic-php56-php-xmlrpc
+        yum -y install atomic-php56-php-gd atomic-php56-php-bcmath atomic-php56-php-imap atomic-php56-php-odbc atomic-php56-php-ldap atomic-php56-php-mhash atomic-php56-php-intl
+        yum -y install atomic-php56-php-snmp atomic-php56-php-soap atomic-php56-php-tidy atomic-php56-php-opcache
+    fi
     cp -f $cur_dir/conf/php.ini /etc/php.ini
     echo "PHP install completed!"
 }

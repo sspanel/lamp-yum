@@ -8,7 +8,7 @@
 * 服务器必须配置好软件源和可连接外网
 * 必须具有系统 Root 权限
 * 建议使用干净系统全新安装
-* 日期：2015 年 08 月 30 日
+* 日期：2015 年 10 月 09 日
 
 ## 关于本脚本
 * 一键 yum 安装所有的软件包，方便升级；
@@ -22,13 +22,13 @@
 * 一键卸载。
 
 ## 将会安装（通过 yum 安装）
-* 1、Apache
+* 1、Apache (Default version)
 * 2、MySQL 5.5 or MariaDB 5.5 latest version
-* 3、PHP 5.4 latest version
-* 4、phpMyAdmin latest version
-* 5、Xcache
-* 6、Zend Guard Loader
-* 7、ionCube PHP Loader
+* 3、PHP 5.4 or 5.5 or 5.6 latest version
+* 4、phpMyAdmin 4.4 latest version
+* 5、Xcache (PHP 5.4 only)
+* 6、Zend Guard Loader (PHP 5.4 only)
+* 7、ionCube PHP Loader (PHP 5.4 only)
 
 ## 如何安装
 ### 第一步，下载、解压、赋予权限：

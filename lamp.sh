@@ -71,10 +71,9 @@ function pre_installation_settings(){
     echo "#############################################################"
     echo ""
     # Install Atomic repository
-    wget -qO- http://www.atomicorp.com/installers/atomic | bash
+    rpm -qa | grep "atomic-release" &>/dev/null
     if [ $? -ne 0 ]; then
-        echo "Error:Atomic repository must be installed!"
-        exit 1
+        wget -qO- http://www.atomicorp.com/installers/atomic | bash
     fi
     # Display Public IP
     echo "Getting Public IP address..."

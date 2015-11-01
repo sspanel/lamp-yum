@@ -241,11 +241,42 @@ function install_php(){
         yum -y install atomic-php55-php atomic-php55-php-cli atomic-php55-php-common atomic-php55-php-devel atomic-php55-php-pdo atomic-php55-php-mysqlnd atomic-php55-php-mcrypt atomic-php55-php-mbstring atomic-php55-php-xml atomic-php55-php-xmlrpc
         yum -y install atomic-php55-php-gd atomic-php55-php-bcmath atomic-php55-php-imap atomic-php55-php-odbc atomic-php55-php-ldap atomic-php55-php-mhash atomic-php55-php-intl
         yum -y install atomic-php55-php-snmp atomic-php55-php-soap atomic-php55-php-tidy atomic-php55-php-opcache
+        # Fix php for httpd configuration
+        cat > /etc/httpd/conf.d/php55.conf<<EOF
+<IfModule prefork.c>
+  LoadModule php5_module modules/libphp55.so
+</IfModule>
+<IfModule !prefork.c>
+  LoadModule php5_module modules/libphp55-zts.so
+</IfModule>
+AddType text/html .php
+DirectoryIndex index.php
+<IfModule  mod_php5.c>
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+    php_value session.save_handler "files"
+    php_value session.save_path    "/var/lib/php/session"
+    php_value soap.wsdl_cache_dir  "/var/lib/php/wsdlcache"
+</IfModule>
+EOF
     fi
     if [ $PHP_version -eq 3 ]; then
         yum -y install atomic-php56-php atomic-php56-php-cli atomic-php56-php-common atomic-php56-php-devel atomic-php56-php-pdo atomic-php56-php-mysqlnd atomic-php56-php-mcrypt atomic-php56-php-mbstring atomic-php56-php-xml atomic-php56-php-xmlrpc
         yum -y install atomic-php56-php-gd atomic-php56-php-bcmath atomic-php56-php-imap atomic-php56-php-odbc atomic-php56-php-ldap atomic-php56-php-mhash atomic-php56-php-intl
         yum -y install atomic-php56-php-snmp atomic-php56-php-soap atomic-php56-php-tidy atomic-php56-php-opcache
+        # Fix php for httpd configuration
+        cat > /etc/httpd/conf.d/php56.conf<<EOF
+<IfModule prefork.c>
+  LoadModule php5_module modules/libphp56.so
+</IfModule>
+<IfModule !prefork.c>
+  LoadModule php5_module modules/libphp56-zts.so
+</IfModule>
+AddHandler php5-script .php
+AddType text/html .php
+DirectoryIndex index.php
+EOF
     fi
     cp -f $cur_dir/conf/php.ini /etc/php.ini
     echo "PHP install completed!"
@@ -328,7 +359,13 @@ function uninstall_lamp(){
         else
             yum -y remove mariadb*
         fi
-        yum -y remove php*
+        if [ -s /usr/bin/atomic-php55-php ]; then
+            yum -y remove atomic-php55-php*
+        elif [ -s /usr/bin/atomic-php56-php ]; then
+            yum -y remove atomic-php56-php*
+        else
+            yum -y remove php*
+        fi
         rm -rf /data/www/default/phpmyadmin
         rm -rf /etc/httpd
         rm -f /usr/bin/lamp

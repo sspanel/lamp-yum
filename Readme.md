@@ -34,7 +34,7 @@
 ### 第一步，下载、解压、赋予权限：
 
     yum install -y unzip
-    wget --no-check-certificate https://github.com/teddysun/lamp-yum/archive/master.zip -O lamp-yum.zip
+    wget --no-check-certificate https://github.com/sspanel/lamp-yum/archive/master.zip -O lamp-yum.zip
     unzip lamp-yum.zip
     cd lamp-yum-master/
     chmod +x *.sh
